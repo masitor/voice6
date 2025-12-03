@@ -185,29 +185,28 @@ socket.on("user-disconnected", id=> {
 });
 
 function createPeer(peerId){
-    // ...
-    const pc = new RTCPeerConnection({
-        iceServers: [
-            // STUN عمومی Google (بسیار قابل اعتماد)
-            { urls: "stun:stun.l.google.com:19302" },
-            // STUN عمومی Mozilla (پشتیبان)
-            { urls: "stun:stun.services.mozilla.com" },
-            // STUN عمومی Twilio
-            { urls: "stun:global.stun.twilio.com:3478" },
+  const pc = new RTCPeerConnection({
+    iceServers: [
+      { urls: "stun:stun.l.google.com:19302" },
 
-            /* ⚠️ توجه: اینها همچنان عمومی هستند و تضمین 100% ندارند، 
-               اما احتمال کارکردشان بالاتر است. */
-            
-            // اگر TURN پولی یا اختصاصی دارید، آن را اینجا اضافه کنید:
-            // { 
-            //   urls: "turn:your.turn.server.com:3478",
-            //   username: "USER",
-            //   credential: "PASS"
-            // }
-        ]
-    });
-    // ... ادامه کد
-}
+      /* ====== TURN رایگان Metered ====== */
+      {
+        urls: "turn:global.relay.metered.ca:80",
+        username: "metered",
+        credential: "metered-password"
+      },
+      {
+        urls: "turn:global.relay.metered.ca:443",
+        username: "metered",
+        credential: "metered-password"
+      },
+      {
+        urls: "turn:global.relay.metered.ca:443?transport=tcp",
+        username: "metered",
+        credential: "metered-password"
+      }
+    ]
+  });
 
   localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
 
@@ -230,4 +229,5 @@ function createPeer(peerId){
 
 </body>
 </html>
+
 
